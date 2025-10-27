@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  trip-recommendator:
+    build: .
+    container_name: trip-recommendator-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    volumes:
+      # Mount source code for hot reload during development
+      - .:/app
+      - /app/node_modules
+    networks:
+      - trip-network
+
+networks:
+  trip-network:
+    driver: bridge
