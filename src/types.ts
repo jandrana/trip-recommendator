@@ -3,6 +3,7 @@ export type PlaceCategory = 'Food' | 'Culture' | 'Nature' | 'Shopping' | 'Accomm
 export interface Place {
   name: string;
   description: string;
+  address: string;
   latitude: number;
   longitude: number;
   category: PlaceCategory;
