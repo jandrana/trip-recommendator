@@ -60,6 +60,8 @@ Then, edit the `.env` and replace `your_gemini_api_key_here` with your actual AP
 
 ## Running the Application
 
+### Local Development with Docker
+
 ```bash
 # Start the application
 docker-compose up -d --build
@@ -74,9 +76,17 @@ docker-compose down --volumes
 docker system prune -a --volumes
 ```
 
-## Accessing the Application
+### Accessing the Application
 
 Once the application is running, you can access it at: [http://localhost:3000](http://localhost:3000)
+
+## Github Pages Deployment
+
+This project is configured for automatic deployment to GitHub Pages using GitHub Actions.
+
+### Access the Deployed Application
+
+The application is accessible at: `https://jandrana.github.io/trip-recommendator/`
 
 ## How to Use
 
