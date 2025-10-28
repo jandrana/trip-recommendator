@@ -83,6 +83,9 @@ export const generateItinerary = async (
     });
 
     const text = response.text;
+    if (!text) {
+      throw new Error("No se recibió respuesta del modelo de IA.");
+    }
     const itinerary = JSON.parse(text);
 
     return itinerary;
