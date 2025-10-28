@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { generateItinerary } from './geminiService';
+import { generateItinerary, AVAILABLE_MODELS, ModelId } from './geminiService';
 import { ItineraryDay, Place, PlaceCategory } from './types';
 import { PaperAirplaneIcon } from './icons/PaperAirplaneIcon';
 import L, { Map, LayerGroup, Marker } from 'leaflet';
@@ -46,6 +46,7 @@ const TripRecommendator: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchAttempted, setSearchAttempted] = useState(false);
+  const [selectedModel, setSelectedModel] = useState<ModelId>('gemini-2.0-flash-exp');
 
   const [location, setLocation] = useState<GeolocationState>({
     loading: true,
@@ -150,7 +151,7 @@ const TripRecommendator: React.FC = () => {
     setSearchAttempted(true);
 
     try {
-      const newItinerary = await generateItinerary(prompt, location.data);
+      const newItinerary = await generateItinerary(prompt, location.data, selectedModel);
       setItinerary(newItinerary);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
@@ -182,6 +183,18 @@ const TripRecommendator: React.FC = () => {
             className="w-full h-32 p-4 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-shadow"
           />
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value as ModelId)}
+              className="w-full sm:w-auto px-4 py-3 bg-gray-800 border border-gray-700 text-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-shadow"
+              disabled={loading}
+            >
+              {AVAILABLE_MODELS.map((model) => (
+                <option key={model.id} value={model.id}>
+                  {model.name}
+                </option>
+              ))}
+            </select>
             <button
               type="submit"
               disabled={loading || !prompt.trim()}

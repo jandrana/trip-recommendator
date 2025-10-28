@@ -9,6 +9,14 @@ if (!API_KEY) {
 
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 
+export const AVAILABLE_MODELS = [
+  { id: 'gemini-2.0-flash-exp', name: 'Gemini 2.0 Flash (Experimental) - Fastest' },
+  { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash - Balanced' },
+  { id: 'gemini-1.5-flash-8b', name: 'Gemini 1.5 Flash-8B - Lighter' },
+] as const;
+
+export type ModelId = typeof AVAILABLE_MODELS[number]['id'];
+
 const itinerarySchema = {
   type: Type.ARRAY,
   items: {
@@ -60,7 +68,8 @@ const itinerarySchema = {
 
 export const generateItinerary = async (
   prompt: string,
-  location: { latitude: number; longitude: number } | null
+  location: { latitude: number; longitude: number } | null,
+  modelId: ModelId = 'gemini-2.0-flash-exp'
 ): Promise<ItineraryDay[]> => {
   try {
     const fullPrompt = `
@@ -74,7 +83,7 @@ export const generateItinerary = async (
     `;
 
     const response: GenerateContentResponse = await ai.models.generateContent({
-        model: 'gemini-2.0-flash-exp',
+        model: modelId,
         contents: fullPrompt,
         config: {
           responseMimeType: "application/json",
@@ -89,11 +98,18 @@ export const generateItinerary = async (
     const itinerary = JSON.parse(text);
 
     return itinerary;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error generating itinerary:", error);
+    
+    // Check if it's an overload error (503)
+    if (error?.message?.includes('overloaded') || error?.message?.includes('503')) {
+      throw new Error("El modelo está sobrecargado en este momento. Por favor, intenta nuevamente en unos segundos o selecciona otro modelo.");
+    }
+    
     if (error instanceof SyntaxError) {
       throw new Error("No se pudo generar el itinerario de viaje. El modelo devolvió un formato JSON no válido.");
     }
+    
     throw new Error("No se pudo generar el itinerario de viaje. Ocurrió un error inesperado.");
   }
 };
