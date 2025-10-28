@@ -10,9 +10,9 @@ if (!API_KEY) {
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 export const AVAILABLE_MODELS = [
-  { id: 'gemini-2.0-flash-exp', name: 'Gemini 2.0 Flash (Experimental) - Fastest' },
-  { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash - Balanced' },
-  { id: 'gemini-1.5-flash-8b', name: 'Gemini 1.5 Flash-8B - Lighter' },
+  { id: 'gemini-2.0-flash-exp', name: 'Gemini 2.0 Flash (Recommended)' },
+  { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash' },
+  { id: 'gemini-1.5-flash-8b', name: 'Gemini 1.5 Flash-8B' },
 ] as const;
 
 export type ModelId = typeof AVAILABLE_MODELS[number]['id'];

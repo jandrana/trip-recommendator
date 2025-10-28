@@ -183,18 +183,6 @@ const TripRecommendator: React.FC = () => {
             className="w-full h-32 p-4 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-shadow"
           />
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-            <select
-              value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value as ModelId)}
-              className="w-full sm:w-auto px-4 py-3 bg-gray-800 border border-gray-700 text-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-shadow"
-              disabled={loading}
-            >
-              {AVAILABLE_MODELS.map((model) => (
-                <option key={model.id} value={model.id}>
-                  {model.name}
-                </option>
-              ))}
-            </select>
             <button
               type="submit"
               disabled={loading || !prompt.trim()}
@@ -207,6 +195,18 @@ const TripRecommendator: React.FC = () => {
               )}
               {loading ? 'Creando...' : 'Crear Itinerario'}
             </button>
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value as ModelId)}
+              className="w-full sm:w-auto px-4 py-3 bg-gray-800 border border-gray-700 text-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition-shadow"
+              disabled={loading}
+            >
+              {AVAILABLE_MODELS.map((model) => (
+                <option key={model.id} value={model.id}>
+                  {model.name}
+                </option>
+              ))}
+            </select>
           </div>
         </form>
 
