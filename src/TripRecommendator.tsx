@@ -92,7 +92,7 @@ const TripRecommendator: React.FC = () => {
       const map = L.map(mapContainerRef.current, {
         center: [20, 0],
         zoom: 2,
-        scrollWheelZoom: false,
+        scrollWheelZoom: true,
       });
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -125,7 +125,15 @@ const TripRecommendator: React.FC = () => {
             });
             if (markers.length > 0) {
               const group = L.featureGroup(markers);
-              mapRef.current.fitBounds(group.getBounds().pad(0.5), { animate: true });
+              // Auto-zoom to fit all markers with some padding
+              setTimeout(() => {
+                if (mapRef.current) {
+                  mapRef.current.fitBounds(group.getBounds().pad(0.1), { 
+                    animate: true,
+                    maxZoom: 15
+                  });
+                }
+              }, 100);
             }
         } else if (mapRef.current) {
             mapRef.current.flyTo([20, 0], 2, { animate: true });
